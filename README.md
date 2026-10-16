@@ -78,6 +78,17 @@ npm run dev
 
 Open **http://localhost:5173**
 
+## Live Demo
+
+| Service | URL |
+|---------|-----|
+| **Frontend (GitHub Pages)** | https://pranjalmanhgaye.github.io/bloodbuddy/ |
+| **Backend API (Render)** | https://bloodbuddy-api.onrender.com |
+
+The frontend deploys automatically to GitHub Pages on every push to `main`. The backend runs on Render (free tier; first request may take up to 60 seconds to wake up).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/PranjalManhgaye/bloodbuddy)
+
 ### Docker
 
 ```bash

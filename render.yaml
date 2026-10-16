@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: bloodbuddy-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: AUTH_MODE
+        value: demo
+      - key: AI_PROVIDER
+        value: demo
+      - key: CORS_ORIGINS
+        value: https://pranjalmanhgaye.github.io
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./data/bloodbuddy.db
+    disk:
+      name: bloodbuddy-data
+      mountPath: /app/data
+      sizeGB: 1

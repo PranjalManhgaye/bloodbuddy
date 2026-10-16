@@ -128,7 +128,7 @@ export function Dashboard() {
             icon={FileText}
             title="No requests yet"
             description="Create a blood donation request manually or upload a document for AI-assisted extraction."
-            action={() => window.location.href = '/request'}
+            action={() => { window.location.href = `${import.meta.env.BASE_URL}request` }}
             actionLabel="Create Request"
           />
         </Card>
