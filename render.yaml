@@ -2,6 +2,8 @@ services:
   - type: web
     name: bloodbuddy-api
     runtime: docker
+    repo: https://github.com/PranjalManhgaye/bloodbuddy
+    branch: main
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     plan: free
@@ -17,7 +19,3 @@ services:
         generateValue: true
       - key: DATABASE_URL
         value: sqlite:///./data/bloodbuddy.db
-    disk:
-      name: bloodbuddy-data
-      mountPath: /app/data
-      sizeGB: 1
