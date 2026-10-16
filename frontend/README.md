@@ -27,7 +27,7 @@ frontend/src/
 ├── assets/                  # Static assets and illustration graphics
 ├── components/
 │   ├── layout/              # Shared navigation, Navbar, and DashboardLayout
-│   └── ui/                  # Reusable UI primitives: Badge, Button, Card, Input, Select, EmptyState, NotificationPreviewModal
+│   └── ui/                  # Reusable UI primitives: Badge, Button, Card, Input, Select, EmptyState, NotificationPreviewModal, DonorLocationMap
 ├── context/
 │   └── AuthContext.tsx       # Authentication state, JWT persistence, and demo persona switching
 ├── lib/
@@ -41,10 +41,11 @@ frontend/src/
 │   ├── Login.tsx            # Sign in with credentials or one-click demo personas
 │   ├── Profile.tsx          # Manage personal details, blood group, and availability status
 │   ├── RequestBlood.tsx     # Manual blood request creation form
-│   └── RequestDetail.tsx    # Live request tracking, matching donors, and WhatsApp share previews
+│   └── RequestDetail.tsx    # Live request tracking, location map, matching donors, and WhatsApp share previews
 ├── test/
 │   ├── setup.ts             # Test setup and jest-dom matchers
 │   ├── Badge.test.tsx       # Component tests
+│   ├── DonorLocationMap.test.tsx # Location map and privacy tests
 │   ├── NotificationPreviewModal.test.tsx # Notification preview modal tests
 │   └── utils.test.ts        # Utility tests
 ├── App.tsx                  # Application routing and theme wrappers
@@ -109,3 +110,9 @@ Configure frontend behavior using environment variables. You can set them in a r
    - Displays a prominent **Demo Mode (Manual Share)** badge.
    - Generates pre-filled coordination links without automating dispatch.
    - Keeps donor contact details private until explicit mutual consent is given.
+
+5. **Donor Location Map (Leaflet & OpenStreetMap)**:
+   - Uses `DonorLocationMap` for geospatial visualization on the request detail page.
+   - Powered by OpenStreetMap tiles via Leaflet with **no paid API keys required**.
+   - Safeguards donor privacy by showing rounded approximate coordinates (~1.1 km radius) and radius circles rather than exact home addresses.
+   - Features responsive mobile and desktop support with graceful fallback when tiles or coordinates are unavailable.
