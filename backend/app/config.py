@@ -1,10 +1,11 @@
+import os
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
     backend_host: str = "0.0.0.0"
-    backend_port: int = 8000
+    backend_port: int = int(os.getenv("PORT", "8000"))
     database_url: str = "sqlite:///./data/bloodbuddy.db"
     cors_origins: str = "http://localhost:5173,http://localhost:3000"
     auth_mode: str = "demo"

@@ -27,7 +27,7 @@ frontend/src/
 ├── assets/                  # Static assets and illustration graphics
 ├── components/
 │   ├── layout/              # Shared navigation, Navbar, and DashboardLayout
-│   └── ui/                  # Reusable UI primitives: Badge, Button, Card, Input, Select, NotificationPreviewModal
+│   └── ui/                  # Reusable UI primitives: Badge, Button, Card, Input, Select, EmptyState, NotificationPreviewModal
 ├── context/
 │   └── AuthContext.tsx       # Authentication state, JWT persistence, and demo persona switching
 ├── lib/
@@ -58,7 +58,8 @@ frontend/src/
 From the `frontend/` directory:
 
 ### `npm run dev`
-Starts the Vite development server with Hot Module Replacement (HMR) at [http://localhost:5173](http://localhost:5173).
+Starts the Vite development server with Hot Module Replacement (HMR).
+- Default address: [http://localhost:5173](http://localhost:5173)
 
 ### `npm run build`
 Runs TypeScript type-checking (`tsc -b`) and compiles production assets into `dist/`.
@@ -77,10 +78,34 @@ Locally serves the compiled `dist/` directory for production verification.
 
 ---
 
-## External Notification Sharing (WhatsApp & SMS Demo)
+## Environment Configuration
 
-BloodBuddy provides a **manual share demo workflow** via `NotificationPreviewModal`:
-- Generates pre-filled coordination messages for **WhatsApp** (`https://wa.me/?text=...`) and **SMS**.
-- Clearly displays a **Demo Mode (Manual Share)** badge.
-- Never sends automated external messages without user review.
-- Protects donor privacy by keeping phone numbers unexposed until explicit mutual consent is recorded.
+Configure frontend behavior using environment variables. You can set them in a root `.env` or `frontend/.env`:
+
+| Variable | Default Value | Description |
+| -------- | ------------- | ----------- |
+| `VITE_API_BASE_URL` | `http://localhost:8000` | Target URL for the FastAPI backend API |
+
+---
+
+## Core Frontend Workflows
+
+1. **AI Document Extraction (`/ai-upload`)**:
+   - Supports uploading hospital requisition forms (TXT, PDF scans, PNG/JPG images).
+   - Renders field-level confidence indicators (`high`, `medium`, `low`, `missing`).
+   - Requires human review and confirmation before submission.
+
+2. **Role-Adaptive Authentication (`/login`)**:
+   - In demo mode, provides one-click instant sign-in buttons for **Priya Sharma (Requester)**, **Rahul Verma (Donor O+)**, and **Admin**.
+   - Syncs JWT tokens in memory and local storage.
+
+3. **Consent-Driven Coordination (`/requests/:id`)**:
+   - Displays real-time status tracker (Draft → Active → Matched → Fulfilled).
+   - Lists eligible matching donors with distance estimates.
+   - Hides sensitive donor contact info until an invitation is accepted.
+
+4. **External Notification Sharing (WhatsApp & SMS Demo)**:
+   - Uses `NotificationPreviewModal` for manual WhatsApp and SMS share generation.
+   - Displays a prominent **Demo Mode (Manual Share)** badge.
+   - Generates pre-filled coordination links without automating dispatch.
+   - Keeps donor contact details private until explicit mutual consent is given.
