@@ -142,6 +142,35 @@ OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=qwen2.5vl:3b
 ```
 
+## Notification System: Demo vs Production
+
+BloodBuddy emphasizes privacy, consent, and user control in all external communications.
+
+### Demo Mode (Pre-filled WhatsApp & SMS Share)
+
+By default, BloodBuddy operates in a privacy-respecting **Demo Notification Mode**:
+- Generates formatted, pre-filled **WhatsApp** and **SMS** coordination links (`https://wa.me/?text=...` and `sms:?body=...`).
+- The UI clearly displays a **Demo Mode (Manual Share)** badge.
+- **Never sends automated external messages without user review**: Requesters and donors explicitly review, edit if desired, and click to open WhatsApp or their messaging app manually.
+- **Privacy Guarantees**: Donor phone numbers and personal contact information are strictly withheld from all shareable URLs and API responses until the donor explicitly accepts the invitation with consent (`contact_shared: true`).
+
+### Integrating a Production Provider (Twilio / WhatsApp Business API)
+
+To automate SMS or WhatsApp notifications in production environments when credentials are available:
+1. Configure provider credentials in `.env`:
+   ```bash
+   # Notification provider: demo | twilio | whatsapp_business
+   NOTIFICATION_PROVIDER=twilio
+   TWILIO_ACCOUNT_SID=your_account_sid
+   TWILIO_AUTH_TOKEN=your_auth_token
+   TWILIO_FROM_NUMBER=+1234567890
+
+   # Optional: WhatsApp Cloud API
+   # WHATSAPP_API_TOKEN=your_access_token
+   # WHATSAPP_PHONE_NUMBER_ID=your_phone_number_id
+   ```
+2. Implement the notification delivery adapter to trigger automated notifications on invitation creation and status updates, maintaining the mutual consent requirement before dispatching recipient contact details.
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
@@ -154,6 +183,8 @@ OLLAMA_MODEL=qwen2.5vl:3b
 | GET | `/api/requests/{id}/matches` | Donor matching |
 | POST | `/api/requests/{id}/invitations` | Send invitation |
 | GET/PATCH | `/api/invitations` | Manage invitations |
+| GET | `/api/invitations/{id}/preview-message` | Preview WhatsApp/SMS invitation message |
+| GET | `/api/requests/{id}/share-message` | Pre-filled public WhatsApp/SMS share link |
 | GET | `/api/requests/{id}/tracking` | Request lifecycle |
 | POST | `/api/demo/reset` | Reset demo data (admin) |
 
@@ -184,7 +215,7 @@ cd frontend && npm test
 
 - Same-blood-group matching only (not medical compatibility assessment)
 - Demo authentication is not production-grade
-- No real SMS/WhatsApp delivery (in-app notifications only)
+- Demo external messaging: Generates pre-filled WhatsApp/SMS manual share previews; production automated delivery requires Twilio or WhatsApp Business API integration
 - SQLite for local development (not production-scale)
 - AI confidence scores are not calibrated probabilities
 
