@@ -181,7 +181,7 @@ export function Landing() {
             <p className="text-sm text-muted">
               Hacktoberfest Hack Day Gwalior × ITM University · Open Source
             </p>
-            <a href="https://github.com" className="text-sm text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/PranjalManhgaye/bloodbuddy" className="text-sm text-primary hover:underline" target="_blank" rel="noopener noreferrer">
               View on GitHub
             </a>
           </div>
