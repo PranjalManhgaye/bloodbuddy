@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FileText, Upload, Clock, ArrowRight, Heart } from 'lucide-react'
+import { FileText, Upload, Clock, ArrowRight, Heart, MessageCircle } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { api, type BloodRequest, type Invitation } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -8,12 +8,15 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { formatDateTime } from '@/lib/utils'
+import { NotificationPreviewModal } from '@/components/ui/NotificationPreviewModal'
 
 export function Dashboard() {
   const { user } = useAuth()
   const [requests, setRequests] = useState<BloodRequest[]>([])
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const [loading, setLoading] = useState(true)
+  const [previewModalOpen, setPreviewModalOpen] = useState(false)
+  const [selectedInvId, setSelectedInvId] = useState<string | undefined>()
 
   useEffect(() => {
     const load = async () => {
@@ -98,13 +101,33 @@ export function Dashboard() {
                       <p className="text-sm font-medium">{inv.request_details?.hospital_name}</p>
                       <p className="text-xs text-muted">{inv.request_details?.blood_group} · {inv.request_details?.city}</p>
                     </div>
-                    <StatusBadge status="accepted" />
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedInvId(inv.id)
+                          setPreviewModalOpen(true)
+                        }}
+                        className="text-emerald-700 hover:text-emerald-800 text-xs h-8 px-2"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />Share via WhatsApp
+                      </Button>
+                      <StatusBadge status="accepted" />
+                    </div>
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
         )}
+
+        <NotificationPreviewModal
+          isOpen={previewModalOpen}
+          onClose={() => setPreviewModalOpen(false)}
+          title="Share Coordination Message"
+          invitationId={selectedInvId}
+        />
       </div>
     )
   }
@@ -162,6 +185,13 @@ export function Dashboard() {
           ))}
         </div>
       )}
+
+      <NotificationPreviewModal
+        isOpen={previewModalOpen}
+        onClose={() => setPreviewModalOpen(false)}
+        title="Share Coordination Message"
+        invitationId={selectedInvId}
+      />
     </div>
   )
 }

@@ -78,6 +78,14 @@ class ApiClient {
     })
   }
 
+  getInvitationPreviewMessage(invitationId: string, channel: 'whatsapp' | 'sms' = 'whatsapp') {
+    return this.request<NotificationPreview>(`/api/invitations/${invitationId}/preview-message?channel=${channel}`)
+  }
+
+  getRequestShareMessage(requestId: string, channel: 'whatsapp' | 'sms' = 'whatsapp') {
+    return this.request<NotificationPreview>(`/api/requests/${requestId}/share-message?channel=${channel}`)
+  }
+
   getDemoStats() { return this.request<DemoStats>('/api/demo/stats') }
   resetDemo() { return this.request<{ message: string }>('/api/demo/reset', { method: 'POST' }) }
   getNotifications() { return this.request<Notification[]>('/api/demo/notifications') }
@@ -209,3 +217,17 @@ export interface Notification {
   read: boolean
   created_at: string
 }
+
+export type NotificationChannel = 'whatsapp' | 'sms'
+
+export interface NotificationPreview {
+  channel: NotificationChannel
+  message: string
+  share_url?: string
+  recipient_phone?: string
+  contact_shared: boolean
+  is_demo_mode: boolean
+  disclaimer: string
+  provider_status: string
+}
+
