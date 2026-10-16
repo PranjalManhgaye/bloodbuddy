@@ -1,3 +1,4 @@
+import enum
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator
@@ -246,5 +247,22 @@ class DemoStatsResponse(BaseModel):
     is_demo_data: bool = True
 
 
+class NotificationChannel(str, enum.Enum):
+    WHATSAPP = "whatsapp"
+    SMS = "sms"
+
+
+class NotificationPreviewResponse(BaseModel):
+    channel: NotificationChannel
+    message: str
+    share_url: Optional[str] = None
+    recipient_phone: Optional[str] = None
+    contact_shared: bool = False
+    is_demo_mode: bool = True
+    disclaimer: str
+    provider_status: str = "demo_manual"
+
+
 class ErrorResponse(BaseModel):
     detail: str
+

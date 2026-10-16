@@ -27,7 +27,7 @@ frontend/src/
 ├── assets/                  # Static assets and illustration graphics
 ├── components/
 │   ├── layout/              # Shared navigation, Navbar, and DashboardLayout
-│   └── ui/                  # Reusable UI primitives (Badge, Button, Card, Input, Select, EmptyState)
+│   └── ui/                  # Reusable UI primitives: Badge, Button, Card, Input, Select, EmptyState, NotificationPreviewModal
 ├── context/
 │   └── AuthContext.tsx       # Authentication state, JWT persistence, and demo persona switching
 ├── lib/
@@ -36,15 +36,16 @@ frontend/src/
 ├── pages/
 │   ├── AIUpload.tsx         # Document upload, extraction preview, and verification
 │   ├── Admin.tsx            # Platform metrics and one-click demo data reset
-│   ├── Dashboard.tsx        # Role-based dashboard (requester requests & donor invitations)
+│   ├── Dashboard.tsx        # Role-based dashboard with coordination sharing
 │   ├── Landing.tsx          # Public landing page with features, CTA, and FAQs
 │   ├── Login.tsx            # Sign in with credentials or one-click demo personas
 │   ├── Profile.tsx          # Manage personal details, blood group, and availability status
 │   ├── RequestBlood.tsx     # Manual blood request creation form
-│   └── RequestDetail.tsx    # Live request lifecycle tracking, matched donors, and invitations
+│   └── RequestDetail.tsx    # Live request tracking, matching donors, and WhatsApp share previews
 ├── test/
 │   ├── setup.ts             # Test setup and jest-dom matchers
 │   ├── Badge.test.tsx       # Component tests
+│   ├── NotificationPreviewModal.test.tsx # Notification preview modal tests
 │   └── utils.test.ts        # Utility tests
 ├── App.tsx                  # Application routing and theme wrappers
 └── main.tsx                 # React entry point
@@ -102,3 +103,9 @@ Configure frontend behavior using environment variables. You can set them in a r
    - Displays real-time status tracker (Draft → Active → Matched → Fulfilled).
    - Lists eligible matching donors with distance estimates.
    - Hides sensitive donor contact info until an invitation is accepted.
+
+4. **External Notification Sharing (WhatsApp & SMS Demo)**:
+   - Uses `NotificationPreviewModal` for manual WhatsApp and SMS share generation.
+   - Displays a prominent **Demo Mode (Manual Share)** badge.
+   - Generates pre-filled coordination links without automating dispatch.
+   - Keeps donor contact details private until explicit mutual consent is given.

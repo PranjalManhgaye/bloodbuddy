@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Send, Users, Clock, XCircle } from 'lucide-react'
+import { MapPin, Send, Users, Clock, XCircle, MessageCircle } from 'lucide-react'
 import { api, type BloodRequest, type DonorMatch, type TrackingData } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { formatDateTime } from '@/lib/utils'
+import { NotificationPreviewModal } from '@/components/ui/NotificationPreviewModal'
 
 export function RequestDetail() {
   const { id } = useParams<{ id: string }>()
@@ -16,6 +17,9 @@ export function RequestDetail() {
   const [loading, setLoading] = useState(true)
   const [inviting, setInviting] = useState<string | null>(null)
   const [invited, setInvited] = useState<Set<string>>(new Set())
+  const [shareModalOpen, setShareModalOpen] = useState(false)
+  const [selectedInvId, setSelectedInvId] = useState<string | undefined>()
+  const [selectedDonorName, setSelectedDonorName] = useState<string | undefined>()
 
   useEffect(() => {
     if (!id) return
@@ -84,11 +88,25 @@ export function RequestDetail() {
             {request.required_date && ` · Needed by ${request.required_date}`}
           </p>
         </div>
-        {request.status !== 'cancelled' && request.status !== 'closed' && (
-          <Button variant="outline" size="sm" onClick={cancelRequest}>
-            <XCircle className="w-4 h-4" />Cancel
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSelectedInvId(undefined)
+              setSelectedDonorName(undefined)
+              setShareModalOpen(true)
+            }}
+            className="text-emerald-700 hover:text-emerald-800"
+          >
+            <MessageCircle className="w-4 h-4 text-emerald-600" />Share Request
           </Button>
-        )}
+          {request.status !== 'cancelled' && request.status !== 'closed' && (
+            <Button variant="outline" size="sm" onClick={cancelRequest}>
+              <XCircle className="w-4 h-4" />Cancel
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Status timeline */}
@@ -165,7 +183,26 @@ export function RequestDetail() {
                   <div className="flex items-center gap-2">
                     <StatusBadge status={donor.availability} />
                     {invited.has(donor.donor_id) ? (
-                      <span className="text-xs text-muted font-medium">Invited</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted font-medium">Invited</span>
+                        {(() => {
+                          const inv = tracking?.invitations.find((i) => i.donor_id === donor.donor_id)
+                          return inv ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedInvId(inv.id)
+                                setSelectedDonorName(donor.display_name)
+                                setShareModalOpen(true)
+                              }}
+                              className="text-emerald-700 hover:text-emerald-800 text-xs h-8 px-2"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />Preview WhatsApp
+                            </Button>
+                          ) : null
+                        })()}
+                      </div>
                     ) : (
                       <Button
                         size="sm"
@@ -206,6 +243,15 @@ export function RequestDetail() {
       )}
 
       <Link to="/dashboard" className="text-sm text-primary hover:underline">← Back to dashboard</Link>
+
+      <NotificationPreviewModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        title={selectedInvId ? `Share with ${selectedDonorName || 'Donor'}` : 'Share Blood Request'}
+        invitationId={selectedInvId}
+        requestId={!selectedInvId ? id : undefined}
+        recipientName={selectedDonorName}
+      />
     </div>
   )
 }

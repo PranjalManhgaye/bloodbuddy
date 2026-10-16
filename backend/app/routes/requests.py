@@ -7,9 +7,11 @@ from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import AIExtraction, User
+from app.notifications import generate_request_share_message
 from app.schemas import (
     AIExtractionResponse, BloodRequestCreate, BloodRequestResponse,
-    BloodRequestUpdate, DonorMatch, RequestTrackingResponse,
+    BloodRequestUpdate, DonorMatch, NotificationChannel,
+    NotificationPreviewResponse, RequestTrackingResponse,
 )
 from app.services import (
     cancel_request, create_request, get_matches, get_request,
@@ -156,3 +158,13 @@ def confirm_extraction(
         confirmed=extraction.confirmed,
         created_at=extraction.created_at,
     )
+
+
+@router.get("/{request_id}/share-message", response_model=NotificationPreviewResponse)
+def get_request_share_message(
+    request_id: str,
+    channel: NotificationChannel = NotificationChannel.WHATSAPP,
+    db: Session = Depends(get_db),
+):
+    return generate_request_share_message(db, request_id, channel)
+
