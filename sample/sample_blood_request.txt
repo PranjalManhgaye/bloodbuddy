@@ -1,0 +1,9 @@
+BLOOD REQUISITION FORM
+City General Hospital, Gwalior
+
+Patient Blood Group: O+
+Units Required: 2
+Date Required: 2026-10-20
+
+Notes: Patient requires O+ blood for scheduled surgery.
+Contact hospital blood bank for coordination.
