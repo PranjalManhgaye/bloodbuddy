@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { formatDateTime } from '@/lib/utils'
 import { NotificationPreviewModal } from '@/components/ui/NotificationPreviewModal'
+import { DonorLocationMap } from '@/components/ui/DonorLocationMap'
 
 export function RequestDetail() {
   const { id } = useParams<{ id: string }>()
@@ -146,6 +147,22 @@ export function RequestDetail() {
           )}
         </CardContent>
       </Card>
+
+      {/* Location & Matching Donors Map */}
+      {request && (
+        <DonorLocationMap
+          request={{
+            hospital_name: request.hospital_name,
+            city: request.city,
+            blood_group: request.blood_group,
+            units_requested: request.units_requested,
+            urgency: request.urgency,
+            latitude: request.latitude,
+            longitude: request.longitude,
+          }}
+          donors={matches}
+        />
+      )}
 
       {/* Matching donors */}
       <Card>

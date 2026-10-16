@@ -166,6 +166,8 @@ export interface DonorMatch {
   distance_km?: number
   availability: string
   match_type: string
+  approximate_latitude?: number
+  approximate_longitude?: number
 }
 
 export interface AIExtraction {

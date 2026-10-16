@@ -64,7 +64,7 @@ graph TD
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS 4, Radix UI (see [frontend/README.md](frontend/README.md)) |
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS 4, Radix UI, Leaflet & OpenStreetMap (see [frontend/README.md](frontend/README.md)) |
 | **Backend** | Python 3.12, FastAPI, SQLAlchemy, Pydantic |
 | **Database** | SQLite (local dev), Firebase-ready architecture |
 | **AI** | Provider abstraction: Demo + Ollama ([Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL)) |
