@@ -45,6 +45,13 @@ def find_matching_donors(
         if latitude and longitude and profile.latitude and profile.longitude:
             distance_km = round(haversine_km(latitude, longitude, profile.latitude, profile.longitude), 1)
 
+        approx_lat = None
+        approx_lon = None
+        if profile.latitude is not None and profile.longitude is not None:
+            # Round coordinates to 2 decimal places (~1.1 km) to safeguard donor privacy
+            approx_lat = round(profile.latitude, 2)
+            approx_lon = round(profile.longitude, 2)
+
         results.append({
             "donor_id": user.id,
             "display_name": user.display_name,
@@ -53,6 +60,8 @@ def find_matching_donors(
             "distance_km": distance_km,
             "availability": profile.availability,
             "match_type": "same_blood_group",
+            "approximate_latitude": approx_lat,
+            "approximate_longitude": approx_lon,
         })
 
     results.sort(key=lambda d: (d["distance_km"] is None, d["distance_km"] or 9999))

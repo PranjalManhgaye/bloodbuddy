@@ -173,6 +173,8 @@ class DonorMatch(BaseModel):
     distance_km: Optional[float]
     availability: AvailabilityStatus
     match_type: str = "same_blood_group"
+    approximate_latitude: Optional[float] = None
+    approximate_longitude: Optional[float] = None
 
 
 class InvitationCreate(BaseModel):
